@@ -133,20 +133,23 @@ class SonarrAPI(BaseArrAPI):
         return self.request_get(path, self.ver_uri)
 
     # PUT /episode
-    def upd_episode(self, data):
-        """Update the given episodes, currently only monitored is changed, all other modifications are ignored.
-
-        Note:
-            To be used in conjunction with get_episode()
+    def upd_episode(self, id_, data):
+        """Update the given episodes, currently only monitored is supported
 
         Args:
-            data (dict): All parameters to update episode
+            id_ (int): ID of the Episode to be updated
+            data (dict[str, Any]): Parameters to update the episode
+
+        Example:
+            ::
+                payload = {"monitored": True}
+                sonarr.upd_episode(1, payload)
 
         Returns:
-            JSON: Array
+            dict[str, Any]: Dictionary with updated record
         """
-        path = "episode"
-        return self.request_put(path, self.ver_uri, data=data)
+        path = f"episode/{id_}"
+        return self.request_put(path, "/v3", data=data)
 
     ## EPISODE FILE
 
@@ -277,7 +280,7 @@ class SonarrAPI(BaseArrAPI):
 
         Args:
             id_ (int): quality profile id from database
-
+            
         Returns:
             JSON: Array
         """
